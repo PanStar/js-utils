@@ -16,7 +16,7 @@ condition | 获取条件是否满足 | Function | 默认为满足
 interval | 时间间隔，单位 毫秒 | Number | 100
 ### Demo
 ```
-import { delay } from 'js-utils'
+import { delay } from 'js-utils-lib'
 let bool = false
 let f = () => console.log('do somethings')
 let c = () => (console.log(bool), bool)
@@ -34,6 +34,6 @@ date | 要转换的数据 | Date | new Date()
 fmt | 指定格式 | String | 默认为'yyyy-MM-dd hh:mm:ss.S'
 ### Demo
 ```
-  import { formatDate } from 'js-utils'
+  import { formatDate } from 'js-utils-lib'
   console.log(formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss.S'))
 ```
