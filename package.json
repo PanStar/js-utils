@@ -1,6 +1,6 @@
 {
-  "name": "js-utils",
-  "version": "0.0.1",
+  "name": "js-utils-lib",
+  "version": "0.0.2",
   "description": "This is a Js Functions Library",
   "main": "dist/js-utils.js",
   "scripts": {

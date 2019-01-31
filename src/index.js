@@ -4,7 +4,7 @@
  * @param {Function} condition 获取条件是否满足 默认为满足
  * @param {Number} interval 时间间隔 单位毫秒 默认为 100ms
  */
-function delay (callFunc, condition = () => true, interval = 100) {
+export function delay (callFunc, condition = () => true, interval = 100) {
   let _delay = (callFunc, condition, interval) => {
     let TIMER = null;
     TIMER = setTimeout(() => {
@@ -23,13 +23,14 @@ function delay (callFunc, condition = () => true, interval = 100) {
   }
 }
 
+/***************************** 数据结构转换 *****************************/
 /**
  * 数组转树结构
  * @param {Array} items 普通数组
  * @param {Object} config 配置 { id, pId, pName}
  * @returns {Array}
  */
-function arrayToTree (items, config = {}) {
+export function arrayToTree (items, config = {}) {
   return _arrayToTree(items, config);
 }
 function _arrayToTree (items = [], { id = 'id', pId = 'parentId', pName = 'parentName' }) {
@@ -75,7 +76,7 @@ function _arrayToTree (items = [], { id = 'id', pId = 'parentId', pName = 'paren
  * @param {Boolean} isDeep 是否深拷贝
  * @returns {Array}
  */
-function treeToArray (treeData = [], isDeep) {
+export function treeToArray (treeData = [], isDeep) {
   let ls = isDeep ? JSON.parse(JSON.stringify(treeData)) : treeData;
   let items = [];
   ls.forEach(item => {
@@ -87,9 +88,38 @@ function treeToArray (treeData = [], isDeep) {
   return items;
 }
 
+/***************************** 数据格式化 *****************************/
+/**
+ * 格式化时间 将 Date 转化为指定格式的String
+ * @param {Date} date 要转换的数据
+ * @param {String} fmt 指定格式 默认为 'yyyy-MM-dd hh:mm:ss.S'
+ */
+export function formatDate (date = new Date(), fmt = 'yyyy-MM-dd hh:mm:ss.S') {
+  const that = date;
+  var o = {
+    "M+" : that.getMonth()+1,                 //月份
+    "d+" : that.getDate(),                    //日
+    "h+" : that.getHours(),                   //小时
+    "m+" : that.getMinutes(),                 //分
+    "s+" : that.getSeconds(),                 //秒
+    "q+" : Math.floor((that.getMonth()+3)/3), //季度
+    "S"  : that.getMilliseconds()             //毫秒
+  };
+  if(/(y+)/.test(fmt)){
+    fmt=fmt.replace(RegExp.$1, (that.getFullYear()+"").substr(4 - RegExp.$1.length));
+  }
+  for(var k in o){
+    if(new RegExp("("+ k +")").test(fmt)){
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    }
+  }
+  return fmt;
+}
+
 export default {
   version: '0.0.1',
   delay,
   arrayToTree,
-  treeToArray
+  treeToArray,
+  formatDate
 };
