@@ -1,0 +1,47 @@
+{
+  "name": "js-utils",
+  "version": "0.0.1",
+  "description": "This is a Js Functions Library",
+  "main": "dist/js-utils.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --hot --inline",
+    "build": "webpack --display-error-details --config webpack.config.js"
+  },
+  "keywords": [
+    "js",
+    "JavaScript",
+    "utils"
+  ],
+  "author": "PanStar",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PanStar/js-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PanStar/js-utils/issues"
+  },
+  "homepage": "https://github.com/PanStar/js-utils#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "es6-promise": "^4.1.1",
+    "eslint": "^4.15.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-html": "^4.0.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "webpack": "^3.9.1",
+    "webpack-dev-server": "^2.9.5"
+  }
+}
