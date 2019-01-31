@@ -6,6 +6,7 @@ This is a Js Functions Library
 
 # How to use
 ## delay
+`delay(callFunc: Function, condition?: Function, interval?: number): void`
 >每隔一段时间判断条件是否满足，条件满足时执行函数
 
 ### API
@@ -24,7 +25,18 @@ setTimeout(() => bool = true, 2000)
 delay(f, c)
 ```
 
+## treeToArray
+`treeToArray(treeData: any[], isDeep: boolean): any[]`
+>树结构转数组
+
+### API
+参数 | 说明 | 类型 | 默认值
+---|---|---|---
+treeData | 树结构数组 | Date | []
+isDeep | 是否深拷贝 | Boolean | false
+
 ## formatDate
+`formatDate(date?: Date, fmt?: string): string`
 >格式化时间 将 Date 转化为指定格式的String
 
 ### API
