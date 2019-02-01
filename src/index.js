@@ -23,7 +23,28 @@ export function delay (callFunc, condition = () => true, interval = 100) {
   }
 }
 
-/***************************** 数据结构转换 *****************************/
+/** *************************** 数据结构转换 *****************************/
+/**
+ * 数组转Map
+ * @param {Array} arr 要转换的数组
+ * @param {String} key Map的key
+ */
+export function arrayToMap (arr = [], key) {
+  let map = {};
+  arr.forEach(i => { map[i[key]] = i; });
+  return map;
+}
+/**
+ * Map转数组
+ * @param {Object} map
+ */
+export function mapToArray (map = {}) {
+  let arr = [];
+  for (let key in map) {
+    arr.push(map[key]);
+  }
+  return arr;
+}
 /**
  * 数组转树结构
  * @param {Array} items 普通数组
@@ -31,7 +52,7 @@ export function delay (callFunc, condition = () => true, interval = 100) {
  * @returns {Array}
  */
 export function arrayToTree (items, config = {}) {
-  const { id = 'id', pId = 'parentId' } = config
+  const { id = 'id', pId = 'parentId' } = config;
   if (items.length === 1) { // 只有一个数据时直接返回
     return items;
   }
@@ -86,16 +107,16 @@ export function treeToArray (treeData = [], isDeep) {
   return items;
 }
 
-/***************************** 数据格式化 *****************************/
+/** *************************** 数据格式化 *****************************/
 /**
  * 字符串反转
  * @param {String} data 要转换的数据
  */
 export function reverse (data) {
   if (typeof data === 'string') {
-    return data.split("").reverse().join("")
+    return data.split('').reverse().join('');
   }
-  return data
+  return data;
 }
 /**
  * 连字符转驼峰
@@ -103,9 +124,9 @@ export function reverse (data) {
  */
 export function hyphenToHump (data) {
   if (typeof data === 'string') {
-    return data.replace(/-(\w)/g, (...args) => args[1].toUpperCase())
+    return data.replace(/-(\w)/g, (...args) => args[1].toUpperCase());
   }
-  return data
+  return data;
 }
 /**
  * 驼峰转连字符
@@ -113,9 +134,9 @@ export function hyphenToHump (data) {
  */
 export function humpToHyphen (data) {
   if (typeof data === 'string') {
-    return data.replace(/([A-Z])/g, '-$1').toLowerCase()
+    return data.replace(/([A-Z])/g, '-$1').toLowerCase();
   }
-  return data
+  return data;
 }
 
 /**
@@ -126,20 +147,20 @@ export function humpToHyphen (data) {
 export function formatDate (date = new Date(), fmt = 'yyyy-MM-dd hh:mm:ss.S') {
   const that = date;
   var o = {
-    "M+" : that.getMonth()+1,                 //月份
-    "d+" : that.getDate(),                    //日
-    "h+" : that.getHours(),                   //小时
-    "m+" : that.getMinutes(),                 //分
-    "s+" : that.getSeconds(),                 //秒
-    "q+" : Math.floor((that.getMonth()+3)/3), //季度
-    "S"  : that.getMilliseconds()             //毫秒
+    'M+': that.getMonth() + 1, // 月份
+    'd+': that.getDate(), // 日
+    'h+': that.getHours(), // 小时
+    'm+': that.getMinutes(), // 分
+    's+': that.getSeconds(), // 秒
+    'q+': Math.floor((that.getMonth() + 3) / 3), // 季度
+    'S': that.getMilliseconds() // 毫秒
   };
-  if(/(y+)/.test(fmt)){
-    fmt=fmt.replace(RegExp.$1, (that.getFullYear()+"").substr(4 - RegExp.$1.length));
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(RegExp.$1, (that.getFullYear() + '').substr(4 - RegExp.$1.length));
   }
-  for(var k in o){
-    if(new RegExp("("+ k +")").test(fmt)){
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+  for (var k in o) {
+    if (new RegExp('(' + k + ')').test(fmt)) {
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
     }
   }
   return fmt;
@@ -148,6 +169,8 @@ export function formatDate (date = new Date(), fmt = 'yyyy-MM-dd hh:mm:ss.S') {
 export default {
   version: '0.0.1',
   delay,
+  arrayToMap,
+  mapToArray,
   arrayToTree,
   treeToArray,
   formatDate,
