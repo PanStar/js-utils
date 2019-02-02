@@ -167,7 +167,7 @@ export function formatDate (date = new Date(), fmt = 'yyyy-MM-dd hh:mm:ss.S') {
 }
 
 export default {
-  version: '0.0.4',
+  version: '0.0.5',
   delay,
   arrayToMap,
   mapToArray,
