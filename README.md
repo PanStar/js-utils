@@ -25,6 +25,55 @@ setTimeout(() => bool = true, 2000)
 delay(f, c)
 ```
 
+## getAllParentsByKey
+`function getAllParentsByKey(value: any, treeData?: any[], key: string, data?: any[], bFind?: boolean): any[] | {bFind: boolean, data: any[]}`
+>根据指定key找出所有父节点
+
+### API
+参数 | 说明 | 类型 | 默认值
+---|---|---|---
+value | 要查找的值 | Number | -
+key | 要指定的key | Function | 'id'
+treeData | 树数据 | Array | []
+data | 父节点数据 | Array | []
+bFind | 是否已找到 | Boolean | false
+### Demo
+```
+import { getAllParentsByKey } from 'js-utils-lib'
+let treeData = [
+  {
+    id: '1',
+    children: [
+      {
+        id: '1-1',
+        children: [
+          {
+            id: '1-1-1',
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: '2',
+    children: [
+      {
+        id: '2-1'
+      },
+      {
+        id: '2-2',
+        children: [
+          {
+            id: '2-2-1',
+          }
+        ]
+      }
+    ]
+  }
+];
+getAllParentsByKey('1-1-1', treeData)
+```
+
 ## treeToArray
 `treeToArray(treeData: any[], isDeep: boolean): any[]`
 >树结构转数组

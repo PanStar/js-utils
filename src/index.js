@@ -23,6 +23,38 @@ export function delay (callFunc, condition = () => true, interval = 100) {
   }
 }
 
+/**
+ * 根据指定key找出所有父节点
+ * @param {*} value 要查找的值
+ * @param {Array} treeData 树数据
+ * @param {String} key 要指定的key 默认为 id
+ * @param {Array} data 父节点数据
+ * @param {Boolean} bFind 是否已找到
+ */
+export function getAllParentsByKey (value, treeData = [], key = 'id', data = [], bFind = false) {
+  if (bFind) return data;
+  let result = { bFind, data };
+
+  try {
+    treeData.forEach(i => {
+      /* eslint-disable */
+      if (result.bFind) throw 'Find it!'; // 退出循环
+      /* eslint-enable */
+      if (i[key] === value) {
+        result.bFind = true;
+      } else if (i.children && i.children.length > 0) {
+        result = getAllParentsByKey(value, i.children, key, data);
+        if (result.bFind) {
+          result.data.push(i);
+        }
+      }
+    });
+  } catch (e) {
+    //
+  }
+  return result;
+}
+
 /** *************************** 数据结构转换 *****************************/
 /**
  * 数组转Map
@@ -167,12 +199,15 @@ export function formatDate (date = new Date(), fmt = 'yyyy-MM-dd hh:mm:ss.S') {
 }
 
 export default {
-  version: '0.0.5',
+  version: '0.0.6',
   delay,
+  getAllParentsByKey,
+
   arrayToMap,
   mapToArray,
   arrayToTree,
   treeToArray,
+
   formatDate,
   hyphenToHump,
   humpToHyphen
