@@ -151,6 +151,23 @@ export function reverse (data) {
   return data;
 }
 /**
+ * 将较长的字符串 中间部分用...代替
+ * @param {String} data 要格式化的字符串
+ * @param {Number} head 头部长度
+ * @param {Number} tail 尾部长度
+ * @param {Number} maxLength 超过 maxLength 时才格式化，不传则不筛选
+ */
+export function formatStringEllipsis (data = '', head = 3, tail = 3, maxLength) {
+  if (typeof data === 'string') {
+    const reg = new RegExp(`^([\\S]{${head}})([\\S]*)([\\S]{${tail}})$`);
+    if (maxLength !== void 0 && data.length <= maxLength) {
+      return data;
+    }
+    return data.replace(reg, '$1...$3');
+  }
+  return data;
+}
+/**
  * 连字符转驼峰
  * @param {String} data 要转换的数据
  */
@@ -209,6 +226,7 @@ export default {
   treeToArray,
 
   formatDate,
+  formatStringEllipsis,
   hyphenToHump,
   humpToHyphen
 };

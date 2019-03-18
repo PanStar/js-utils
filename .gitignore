@@ -12,7 +12,9 @@ test/e2e/reports/
 # Editor directories and files
 .idea
 .vscode
+.history
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+.npmrc
