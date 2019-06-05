@@ -3,23 +3,27 @@
  * @param {Function} callFunc 条件满足时执行的函数
  * @param {Function} condition 获取条件是否满足 默认为满足
  * @param {Number} interval 时间间隔 单位毫秒 默认为 100ms
+ * @param {Number} timeout 超时时间 单位毫秒 默认为 100000ms
  */
-export function delay (callFunc, condition = () => true, interval = 100) {
+export function delay (callFunc, condition = () => true, interval = 100, timeout = 100000) {
+  timeout -= interval;
   let _delay = (callFunc, condition, interval) => {
     let TIMER = null;
     TIMER = setTimeout(() => {
       if (condition()) {
         clearTimeout(TIMER);
         callFunc();
+      } else if (timeout < 0) {
+        console.error('执行超时', condition, callFunc);
       } else {
-        _delay(callFunc, condition, interval);
+        _delay(callFunc, condition, interval, timeout);
       }
     }, interval);
   };
   if (condition()) { // 先判断是否满足条件
     callFunc();
   } else {
-    _delay(callFunc, condition, interval);
+    _delay(callFunc, condition, interval, timeout);
   }
 }
 
@@ -54,16 +58,26 @@ export function getAllParentsByKey (value, treeData = [], key = 'id', data = [],
   }
   return result;
 }
+/** **/
+/**
+ * 连接数组(多参数)
+ * @param  {...any} arr 要连接的数组
+ * @returns {Array}
+ */
+export function arrayConcat (...arr) {
+  return arr.reduce((a, i) => { Array.prototype.push.apply(a, Array.prototype.concat(i)); return a; }, []);
+}
 
 /** *************************** 数据结构转换 *****************************/
 /**
  * 数组转Map
  * @param {Array} arr 要转换的数组
  * @param {String} key Map的key
+ * @returns {Object}
  */
 export function arrayToMap (arr = [], key) {
   let map = {};
-  arr.forEach(i => { map[i[key]] = i; });
+  arr.forEach(i => { map[i[key] || i] = i; });
   return map;
 }
 /**
@@ -159,7 +173,7 @@ export function reverse (data) {
  */
 export function formatStringEllipsis (data = '', head = 3, tail = 3, maxLength) {
   if (typeof data === 'string') {
-    const reg = new RegExp(`^([\\S]{${head}})([\\S]*)([\\S]{${tail}})$`);
+    const reg = new RegExp(`^(.{${head}})(.*)(.{${tail}})$`);
     if (maxLength !== void 0 && data.length <= maxLength) {
       return data;
     }

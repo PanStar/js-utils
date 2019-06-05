@@ -10,7 +10,7 @@ This is a Js Functions Library
 
 ## delay
 
-`delay(callFunc: Function, condition?: Function, interval?: number): void`
+`delay(callFunc: Function, condition?: Function, interval?: number, timeout?: number): void`
 >每隔一段时间判断条件是否满足，条件满足时执行函数
 
 ### API
@@ -20,6 +20,7 @@ This is a Js Functions Library
 callFunc | 条件满足时执行的函数 | Function | 0
 condition | 获取条件是否满足 | Function | 默认为满足
 interval | 时间间隔，单位 毫秒 | Number | 100
+timeout | 超时时间，单位 毫秒 | Number | 100000
 
 ### Demo
 
@@ -83,6 +84,18 @@ let treeData = [
   }
 ];
 getAllParentsByKey('1-1-1', treeData)
+```
+
+## arrayConcat
+
+`arrayConcat(...arr: any[]): any[]`
+>连接数组(多参数)
+
+### Demo
+
+```js
+  import { arrayConcat } from 'js-utils-lib'
+  let arr = arrayConcat(1,2,[3,4])
 ```
 
 ## treeToArray
