@@ -58,7 +58,7 @@ export function getAllParentsByKey (value, treeData = [], key = 'id', data = [],
   }
   return result;
 }
-/** **/
+
 /**
  * 连接数组(多参数)
  * @param  {...any} arr 要连接的数组
@@ -67,7 +67,30 @@ export function getAllParentsByKey (value, treeData = [], key = 'id', data = [],
 export function arrayConcat (...arr) {
   return arr.reduce((a, i) => { Array.prototype.push.apply(a, Array.prototype.concat(i)); return a; }, []);
 }
-
+/**
+ * 深拷贝
+ * @param {Object} o 要深拷贝的对象
+ */
+export function deepCopy (o) {
+  if (o instanceof Array) {
+    let n = [];
+    for (let i = 0; i < o.length; ++i) {
+      n[i] = deepCopy(o[i]);
+    }
+    return n;
+  } else if (o instanceof Function) {
+    let n = new Function('return ' + o.toString())();
+    return n;
+  } else if (o instanceof Object) {
+    let n = {};
+    for (let i in o) {
+      n[i] = deepCopy(o[i]);
+    }
+    return n;
+  } else {
+    return o;
+  }
+}
 /** *************************** 数据结构转换 *****************************/
 /**
  * 数组转Map
@@ -98,7 +121,7 @@ export function mapToArray (map = {}) {
  * @returns {Array}
  */
 export function arrayToTree (items, config = {}) {
-  const { id = 'id', pId = 'parentId' } = config;
+  const { id = 'id', pId = 'parentId', children = 'children' } = config;
   if (items.length === 1) { // 只有一个数据时直接返回
     return items;
   }
@@ -110,7 +133,7 @@ export function arrayToTree (items, config = {}) {
     const parentId = item[pId];
 
     if (!Object.prototype.hasOwnProperty.call(lookup, itemId)) {
-      lookup[itemId] = { children: [], ...item };
+      lookup[itemId] = { [children]: [], ...item };
     }
 
     const TreeItem = {...item, ...lookup[itemId]};
@@ -118,10 +141,10 @@ export function arrayToTree (items, config = {}) {
       rootItems.push(TreeItem);
     } else {
       if (!Object.prototype.hasOwnProperty.call(lookup, parentId)) {
-        lookup[parentId] = { children: [] };
+        lookup[parentId] = { [children]: [] };
         lookup[parentId][id] = parentId;
       }
-      lookup[parentId].children.push(TreeItem);
+      lookup[parentId][children].push(TreeItem);
       childrenItems[itemId] = TreeItem;
     }
   }
@@ -154,6 +177,13 @@ export function treeToArray (treeData = [], isDeep) {
 }
 
 /** *************************** 数据格式化 *****************************/
+
+/**
+ * 将值转换成布尔值
+ * @param {Boolean} bool 要转换的值
+ */
+export const toBoolean = bool => bool + '' === 'true';
+
 /**
  * 字符串反转
  * @param {String} data 要转换的数据
@@ -169,9 +199,14 @@ export function reverse (data) {
  * @param {String} data 要格式化的字符串
  * @param {Number} head 头部长度
  * @param {Number} tail 尾部长度
+ * @param {Boolean} calcChina 是否计算中文
  * @param {Number} maxLength 超过 maxLength 时才格式化，不传则不筛选
  */
-export function formatStringEllipsis (data = '', head = 3, tail = 3, maxLength) {
+export function formatStringEllipsis (data = '', head = 3, tail = 3, calcChina = false, maxLength) {
+  if (calcChina) {
+    head = getLengthForChina(data, head);
+    tail = getLengthForChina(data, tail, true);
+  }
   if (typeof data === 'string') {
     const reg = new RegExp(`^(.{${head}})(.*)(.{${tail}})$`);
     if (maxLength !== void 0 && data.length <= maxLength) {
@@ -180,6 +215,21 @@ export function formatStringEllipsis (data = '', head = 3, tail = 3, maxLength) 
     return data.replace(reg, '$1...$3');
   }
   return data;
+}
+/**
+ * 转换字符长度 按两个非英文或数字占一个字符长度
+ * @param {String} data 要格式化的字符串
+ * @param {Number} length 要计算的长度
+ * @param {Boolean} bTail 是否从尾部开始
+ */
+export function getLengthForChina (data = '', length = 0, bTail) {
+  let char = bTail ? data.substr(-length * 2).split('').reverse() : data.substr(0, length * 2).split('');
+  let len = 0;
+  let max = length * 4;
+  return char.map(i => i.charCodeAt().toString(16)).filter(i => {
+    len += i.length;
+    return len <= max;
+  }).length;
 }
 /**
  * 连字符转驼峰
