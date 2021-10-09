@@ -6,25 +6,54 @@
  * @param {Number} timeout 超时时间 单位毫秒 默认为 100000ms
  */
 export function delay (callFunc, condition = () => true, interval = 100, timeout = 100000) {
-  timeout -= interval;
-  let _delay = (callFunc, condition, interval) => {
-    let TIMER = null;
-    TIMER = setTimeout(() => {
-      if (condition()) {
-        clearTimeout(TIMER);
-        callFunc();
-      } else if (timeout < 0) {
-        console.error('执行超时', condition, callFunc);
-      } else {
-        _delay(callFunc, condition, interval, timeout);
-      }
-    }, interval);
-  };
-  if (condition()) { // 先判断是否满足条件
-    callFunc();
-  } else {
-    _delay(callFunc, condition, interval, timeout);
+  return new Promise((resolve, reject) => {
+    let _delay = (callFunc, condition, interval) => {
+      timeout -= interval;
+      let TIMER = null;
+      TIMER = setTimeout(() => {
+        if (condition()) {
+          clearTimeout(TIMER);
+          callFunc();
+          resolve();
+        } else if (timeout < 0) {
+          // console.error('执行超时', condition, callFunc);
+          reject({ msg: '执行超时', condition, callFunc });
+        } else {
+          _delay(callFunc, condition, interval, timeout);
+        }
+      }, interval);
+    };
+    if (condition()) { // 先判断是否满足条件
+      callFunc();
+      resolve();
+    } else {
+      _delay(callFunc, condition, interval, timeout);
+    }
+  })
+}
+
+/**
+ * 切换全屏显示状态
+ * @param {Boolean} bFullScreen 指定切换状态
+ */
+ export function toggleFullScreen(bFullScreen, el) {
+  if (bFullScreen === undefined) {
+    // 未指定则取反
+    bFullScreen = !(document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen);
   }
+  el = el || document.documentElement;
+  if (bFullScreen) {
+    // 进入全屏,多重短路表达式
+    (el.requestFullscreen && el.requestFullscreen()) ||
+      (el.mozRequestFullScreen && el.mozRequestFullScreen()) ||
+      (el.webkitRequestFullscreen && el.webkitRequestFullscreen()) ||
+      (el.msRequestFullscreen && el.msRequestFullscreen());
+  } else {
+    // 退出全屏
+    const exitFullscreen = document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen;
+    exitFullscreen && exitFullscreen.bind(document)();
+  }
+  return bFullScreen;
 }
 
 /**
