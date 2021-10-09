@@ -205,6 +205,23 @@ export function treeToArray (treeData = [], isDeep) {
   return items;
 }
 
+/**
+ * 替换对象key值 该方法会改变原对象
+ * @param {*} data 要替换的对象
+ * @param {*} fields key值 { newKey: key, ... }
+ * @param {*} bRemoveOrigin 是否删除原值
+ * @param {*} children 深层遍历的key(新值) 不传则不遍历
+ */
+export function replaceFields(data, fields = {}, bRemoveOrigin = false, children = 'children') {
+  Object.keys(fields).forEach(key => {
+    data[key] = data[fields[key]];
+    bRemoveOrigin && delete data[fields[key]];
+  });
+  if(Array.isArray(data[children])) {
+    data[children].forEach(i => replaceFields(i, fields, bRemoveOrigin, children ));
+  }
+}
+
 /** *************************** 数据格式化 *****************************/
 
 /**
